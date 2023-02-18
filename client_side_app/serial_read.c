@@ -42,20 +42,29 @@ void read_serial_data(char* r_buffer, int s_port);
 //--------------------------------------------------------------
 
 int main(int argc, char* argv[]){
+	// initialize port here
+	int port = 0;
+	// count variable to test port
+	int count = 0;
+
 	// command line checks will be useful later for debugging
 	if(argc > 1){
 		display_non_errno_error("Too many arguments supplied!");
 		return 1;
 	}
 	
-	// try to open the port and check for errors
-	int port = open(OPEN_PORT, O_RDWR);
-	if(port < 0){
-		display_errno_error(errno, "open");
-		if(!DEBUG_MODE){
-			return 1;
+	// try to open the port and check for errors	
+	port = open(OPEN_PORT, O_RDWR);
+	// attempt to open port 20 times before quiting
+	while(port <= 0 && count < 20){
+		count++;
+		// error messages
+		display_non_errno_error("Retrying serial port connection...");
+		if(DEBUG_MODE){
+			printf("Connections attempted: %d\n", count);
+			display_errno_error(errno, "open");
 		}
-	}	
+	}
 
 	// initialize tty of type termios and read in current port data
 	struct termios tty;
