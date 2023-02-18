@@ -21,14 +21,20 @@
 #define OPEN_PORT "/dev/ttyUSB0"
 #endif
 
+// change to 0 to disable debug mode
+#ifndef DEBUG_MODE
+#define DEBUG_MODE 1
+#endif
+
 
 //-------------------------------------------------------------- 
 // FUNCTION PROTOTYPES
 //--------------------------------------------------------------
 
-void display_errno_error(int i, char* s);
-void display_non_errno_error(char* s);
+void display_errno_error(int errno_int, char* errno_function);
+void display_non_errno_error(char* e_message);
 void set_termios_flags(struct termios* t);
+void read_serial_data(char* r_buffer, int s_port); 
 
 
 //-------------------------------------------------------------- 
@@ -36,8 +42,6 @@ void set_termios_flags(struct termios* t);
 //--------------------------------------------------------------
 
 int main(int argc, char* argv[]){
-	bool debug_flag = false;
-
 	// command line checks will be useful later for debugging
 	if(argc > 1){
 		display_non_errno_error("Too many arguments supplied!");
@@ -48,7 +52,7 @@ int main(int argc, char* argv[]){
 	int port = open(OPEN_PORT, O_RDWR);
 	if(port < 0){
 		display_errno_error(errno, "open");
-		if(!debug_flag){
+		if(!DEBUG_MODE){
 			return 1;
 		}
 	}	
@@ -57,7 +61,7 @@ int main(int argc, char* argv[]){
 	struct termios tty;
 	if(tcgetattr(port, &tty) !=0){
 		display_errno_error(errno, "tcgetattr");
-		if(!debug_flag){
+		if(!DEBUG_MODE){
 			return 1;
 		}
 	}
@@ -71,10 +75,17 @@ int main(int argc, char* argv[]){
 	// save all flags set above
 	if(tcsetattr(port, TCSANOW, &tty) != 0){
 		display_errno_error(errno, "tcsetattr");
-		if(!debug_flag){
+		if(!DEBUG_MODE){
 			return 1;
 		}
 	}
+
+	// initialize big buffer to store data in
+	char read_buffer [256];
+	read_serial_data(read_buffer, port);
+
+	// close serial port
+	close(port);
 
 	return 0;
 }
@@ -89,16 +100,16 @@ int main(int argc, char* argv[]){
 // Purpose: catches errno at specific error points and displays
 // information about the error
 //--------------------------------------------------------------
-void display_errno_error(int i, char* s){
-	printf("Error %i from %s: %s\n", i, s, strerror(i)); 
+void display_errno_error(int errno_int, char* errno_function){
+	printf("Error %i from %s: %s\n", errno_int, errno_function, strerror(errno_int)); 
 }
 
 //-------------------------------------------------------------- 
 // Function: display_non_errno_error
 // Purpose: error handling NOT at the system level
 //--------------------------------------------------------------
-void display_non_errno_error(char* s){
-	printf("Error message: %s\n", s);
+void display_non_errno_error(char* e_message){
+	printf("Error message: %s\n", e_message);
 }
 
 //-------------------------------------------------------------- 
@@ -185,3 +196,23 @@ void set_termios_flags(struct termios* t){
 	t->c_cc[VMIN] = 0; // TEMP VALUE
 }
 
+//-------------------------------------------------------------- 
+// Function: read_serial_data
+// Purpose: currently read and display data, this may be changed
+// in the future though
+//--------------------------------------------------------------
+void read_serial_data(char* r_buffer, int s_port){
+	int bytes_received = 0;
+
+	// clear buffer
+	memset(r_buffer, '\0', sizeof(r_buffer));
+	// read data in from serial port
+	bytes_received = read(s_port, r_buffer, sizeof(r_buffer));
+	// check bytes recieved
+	if(bytes_received < 0){
+		display_errno_error(errno, "Error reading in read_serial_data");
+	}
+
+	printf("Read %i bytes from serial port. ", s_port);
+	printf("Message recieved: %s\n", r_buffer);
+}
