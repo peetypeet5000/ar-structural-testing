@@ -62,23 +62,21 @@ int main(int argc, char* argv[]){
 		display_perror_error("Error connecting to server");
 	}
 
-	// test shit can be cleaned up
-	printf("Please enter message: ");
-    bzero(buff, BUFFER);
-    fgets(buff, BUFFER, stdin);
+	while(1) {
 
-	// server write
-	message = write(sock_fd, buff, strlen(buff));
-	if(message < 0){
-		display_perror_error("Error writing to socket");
+		// test shit can be cleaned up
+		printf("Please enter message: ");
+    		bzero(buff, BUFFER);
+    		fgets(buff, BUFFER, stdin);
+
+		// server write
+		message = write(sock_fd, buff, strlen(buff));
+		if(message < 0){
+			display_perror_error("Error writing to socket");
+		}
+
 	}
 
-	// more test shit
-	bzero(buff, BUFFER);
-    message = read(sock_fd, buff, BUFFER);
-    if (message < 0) 
-    	display_perror_error("Error reading from socket");
-    printf("Echo from server: %s", buff);
 
 	close(sock_fd);
 	return 0;
