@@ -101,6 +101,7 @@ int main(int argc, char* argv[]){
 			case 1:
 				sprintf(&buff[pos], "\n");
         		printf(buff);  
+				break;
 		}
         sleep(DELAY);
 
