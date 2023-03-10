@@ -14,10 +14,16 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <time.h>
 
 #ifndef BUFFER
 #define BUFFER 64
 #endif
+
+#define NUM_SENSORS 5			//number of values code will simulate, DONT FORGET TO INCREASE BUFFER SIZE IF USING LARGER NUMBERS
+#define DELAY 1					//delay in seconds between sending values
+#define MAX_VALUE 10			//maximum value (exclusive) generated
+#define PRINT_BOOL 1            //print in console what is being sent
 
 void display_perror_error(char* p_message);
 
@@ -30,6 +36,10 @@ int main(int argc, char* argv[]){
 	struct hostent *server;
 	char* host;
 	char buff[BUFFER];
+
+	srand(time(NULL));  
+    float a = MAX_VALUE; //max num
+
 
 	// command line check
 	if(argc != 3){
@@ -65,15 +75,35 @@ int main(int argc, char* argv[]){
 	while(1) {
 
 		// test shit can be cleaned up
-		printf("Please enter message: ");
+		/*printf("Please enter message: ");
     		bzero(buff, BUFFER);
     		fgets(buff, BUFFER, stdin);
+		*/
 
+		//TESTING VALUES
+		bzero(buff, BUFFER);
+		int i;
+		int pos = 0;
+		float x;
+        for (i = 0; i < NUM_SENSORS; i++){
+            x = (float)rand()/(float)(RAND_MAX/a);
+            pos += sprintf(&buff[pos], "%1.4f;", x);
+            
+        }
 		// server write
 		message = write(sock_fd, buff, strlen(buff));
 		if(message < 0){
 			display_perror_error("Error writing to socket");
 		}
+		switch(PRINT_BOOL){
+			case 0:
+				break;
+			case 1:
+				sprintf(&buff[pos], "\n");
+        		printf(buff);  
+				break;
+		}
+        sleep(DELAY);
 
 	}
 
