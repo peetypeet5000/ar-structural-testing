@@ -1,9 +1,9 @@
 CC = gcc
 CFLAGS = -g -Wall
-TARGET = serial_read
+TARGET = ar_serial_client
 
-all: serial_read.c
-	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).c
+all: ar_serial_client.c
+	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).c -w
 
 clean:
 	$(RM) $(TARGET) *.so *.o a.out
