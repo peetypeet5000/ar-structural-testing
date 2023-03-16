@@ -64,81 +64,67 @@ void display_non_errno_error(char* e_message){
 // probably want to live in its own header file for termios
 // setup
 //--------------------------------------------------------------
-void set_termios_flags(struct termios* t){
-	// comment/uncomment what you need for termios setup
-	
-	// parity
-	t->c_cflag &= ~PARENB; // clear
-//	t->c_cflag |= PARENB; // set
+int
+set_termios_flags (int fd, int speed, int parity)
+{
+        struct termios tty;
+        if (tcgetattr (fd, &tty) != 0)
+        {
+                display_errno_error (errno ,"tcgetattr");
+                return -1;
+        }
 
-	// stop bits
-	t->c_cflag &= ~CSTOPB; // 1 stop bit
-//	t->c_cflag |= CSTOPB; // 2 stop bits
+        cfsetospeed (&tty, speed);
+        cfsetispeed (&tty, speed);
 
-	// bits per byte
-	t->c_cflag &= ~CSIZE; // clear size bits before set
-//	t->c_cflag |= CS5; // 5 bits
-//	t->c_cflag |= CS6; // 6 bits
-//	t->c_cflag |= CS7; // 7 bits
-	t->c_cflag |= CS8; // 8 bits
+        tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8;     // 8-bit chars
+        // disable IGNBRK for mismatched speed tests; otherwise receive break
+        // as \000 chars
+        tty.c_iflag &= ~IGNBRK;         // disable break processing
+        tty.c_lflag = 0;                // no signaling chars, no echo,
+                                        // no canonical processing
+        tty.c_oflag = 0;                // no remapping, no delays
+        tty.c_cc[VMIN]  = 0;            // read doesn't block
+        tty.c_cc[VTIME] = 5;            // 0.5 seconds read timeout
 
-	// hardware flow control
-	t->c_cflag &= ~CRTSCTS; // disable
-//	t->c_cflag |= CRTSCTS; // enable
+        tty.c_iflag &= ~(IXON | IXOFF | IXANY); // shut off xon/xoff ctrl
 
-	// turn on CREAD and CLOCAL
-	// this should probably never be modifed
-	t->c_cflag |= CREAD | CLOCAL;
+        tty.c_cflag |= (CLOCAL | CREAD);// ignore modem controls,
+                                        // enable reading
+        tty.c_cflag &= ~(PARENB | PARODD);      // shut off parity
+        tty.c_cflag |= parity;
+        tty.c_cflag &= ~CSTOPB;
+        tty.c_cflag &= ~CRTSCTS;
 
-	// TO DO
-	// we disable canonical mode because we are basing read off
-	// frequency currently, not string characters
-	// this CAN be modified however, I believe that the DAQ allows
-	// for canonical write using specific characters, this is 
-	// something to revisit
+        if (tcsetattr (fd, TCSANOW, &tty) != 0)
+        {
+                display_errno_error (errno, "tcsetattr");
+                return -1;
+        }
+        return 0;
+}
 
-	// canonical mode
-	t->c_cflag &= ~ICANON; // disable
-//	t->c_cflag |= ICANON; // enable
+//-------------------------------------------------------------- 
+// Function: set_blocking
+// Purpose: controls weather input fd will block upon a read
+// or write
+//--------------------------------------------------------------
+void
+set_blocking (int fd, int should_block)
+{
+        struct termios tty;
+        memset (&tty, 0, sizeof tty);
+        if (tcgetattr (fd, &tty) != 0)
+        {
+                display_errno_error (errno, "tggetattr");
+                return;
+        }
 
-	// echo
-	t->c_cflag &= ~ECHO; // disable
-//	t->c_cflag |= ECHO; // echo
-	
-	// erasure
-	t->c_cflag &= ~ECHOE; // disable
-//	t->c_cflag |= ECHOE; // enable
+        tty.c_cc[VMIN]  = should_block ? 1 : 0;
+        tty.c_cc[VTIME] = 5;            // 0.5 seconds read timeout
 
-	// new line echo
-	t->c_cflag &= ~ECHONL; // disable
-//	t->c_cflag |= ECHONL; // enable
-
-	// disable signal chars
-	// this should also probably not be modified
-	t->c_cflag &= ~ISIG;
-
-	// software flow control
-	// I am not totally sure what this does but it seems like we
-	// want it for serial communication according to this doc:
-	// http://uw714doc.sco.com/en/SDK_sysprog/_TTY_Flow_Control.html
-	t->c_iflag &= ~(IXON | IXOFF | IXANY);
-
-	// special byte handling
-	// this should probably not be modified for serial
-	t->c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL);
-
-	// output modes
-	// these handle character conversion, so just disable them
-	t->c_oflag &= ~OPOST;
-	t->c_oflag &= ~ONLCR;
-
-	// TO DO
-	// VMIN and VTIME are going to be pretty depended on the speed of the DAQ
-	// as far as I know so this needs to be revisited
-	
-	// timing
-	t->c_cc[VTIME] = 5; // TEMP VALUE
-	t->c_cc[VMIN] = 0; // TEMP VALUE
+        if (tcsetattr (fd, TCSANOW, &tty) != 0)
+                display_errno_error (errno, "tcsetattr");
 }
 
 //-------------------------------------------------------------- 
@@ -148,7 +134,7 @@ void set_termios_flags(struct termios* t){
 //--------------------------------------------------------------
 void read_serial_data(int s_port, char dest[BUFFER]){
 	int bytes_received = 0;
-	char read_buffer [256];
+	char read_buffer [64];
 
 	// clear buffer
 	memset(&read_buffer, '\0', sizeof(read_buffer));
@@ -193,7 +179,7 @@ int main(int argc, char* argv[]){
 // SERIAL SETUP BEGIN
 //--------------------------------------------------------------
 	// try to open the port and check for errors	
-	serial_read_port = open(OPEN_PORT, O_RDWR);
+	serial_read_port = open (OPEN_PORT, O_RDWR | O_NOCTTY | O_SYNC);;
 	// attempt to open port 20 times before quiting
 	while(serial_read_port <= 0 && count < 20){
 		count++;
@@ -206,27 +192,17 @@ int main(int argc, char* argv[]){
 	}
 
 	// initialize tty of type termios and read in current port data
-	struct termios tty;
-	if(tcgetattr(serial_read_port, &tty) !=0){
-		display_errno_error(errno, "tcgetattr");
-		if(!DEBUG_MODE){
-			return 1;
-		}
-	}
+	set_termios_flags (serial_read_port, B9600, 0);
 
 	// configure termios port
-	set_termios_flags(&tty);
-	// configure baud rate in and out
-	cfsetispeed(&tty, B9600);
-	cfsetospeed(&tty, B9600);
+	set_blocking(serial_read_port, 1);
 
-	// save all flags set above
-	if(tcsetattr(serial_read_port, TCSANOW, &tty) != 0){
-		display_errno_error(errno, "tcsetattr");
-		if(!DEBUG_MODE){
-			return 1;
-		}
+	// Read data
+	while(1){
+		bzero(buff, BUFFER);
+		read_serial_data(serial_read_port, buff);
 	}
+
 //--------------------------------------------------------------
 // SERIAL SETUP END
 //--------------------------------------------------------------
