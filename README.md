@@ -1,4 +1,5 @@
 # Hololens Materials Stress Visualisation
+![Cover image of a HoloLens](screenshots/cover.png)
 
 ## Authors
 - Austin Friedrich
@@ -14,6 +15,8 @@ a user's view of the outside world. The forces will be represented via color, al
 are under stress at any given time.
 
 ## Screenshots
+![Screenshot 1](screenshots/screenshot_1.png)
+![Screenshot 2](screenshots/screenshot_2.png)
 
 ### Demo
 A video demonstration can be accessed [here](https://media.oregonstate.edu/media/t/1_ddj6zb36)
@@ -54,10 +57,10 @@ Manual Option:
      2. Microsoft.VCRTForwarders.140
   3. MRTK Version 2
       1. Using the MRTK feature tool, point it to the project directory and press “Restore Features”
-      2. Alternatively, install these features
+      2. Alternatively, install these features ![MRTK Features List](screenshots/mrtk.png)
 
 3. At this point, the project should run directly in the editor
-4. Build to a folder with these settings
+4. Build to a folder with these settings ![Build Image](screenshots/build.png)
 
 5. Open the folder, and open “AR_CS_Structural_Testing.sln”
 6. Go to the “Project” tab, and select “AR_CS_Structural_Testing Properties”
@@ -84,10 +87,12 @@ Manual Option:
 ## Documentation/Help
 ### Unity Project Documentation
 The files in the “Scripts” folder in Unity contain the code used for this project. Each of these scripts is independently documented 
-with their purpose. The following diagram shows the general relationship between the scripts in Unity
+with their purpose. The following diagram shows the general relationship between the scripts in Unity:
+![Unity Diagram](screenshots/unity.png)
 
 ### Server Documentation
-The following shows the general functionality of the C script
+The following shows the general functionality of the C script:
+![TCP](screenshots/tcp.png)
 
 ### Oustide Documentation
 The following pieces of documentation were references in making this project:  
