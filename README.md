@@ -48,6 +48,7 @@ the data to the heatmap.
 
 Manual Option:
 1. Install Unity version: 2021.3.18f1 
+2. Install Visual Studio with the correct dependencies according to [this](https://learn.microsoft.com/en-us/windows/mixed-reality/develop/install-the-tools#installation-checklist).
 2. Download the Unity Files from [here](https://drive.google.com/file/d/1LzIgh8ygWYbkyFkig1FuCX5lFI8wVHlr/view?usp=share_link)
 3. Unity Dependencies:
   1. NuGet Addon:
