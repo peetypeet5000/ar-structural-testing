@@ -66,10 +66,14 @@ Manual Option:
 5. Open the folder, and open “AR_CS_Structural_Testing.sln”
 6. Go to the “Project” tab, and select “AR_CS_Structural_Testing Properties”
 7. In the “Debugging” tab, change the “Machine Name” to the IP Address of your HoloLens
-8. Ensure your HoloLens is powered on and click the Play button in VS
+8. On the right side on VS in the Project menu, expand the project and open the .appxmanifest file. Enable the following capabilities:
+  1. Private networks (Client and Server)
+  2. Internet (Client and Server)
+  3. Internet (Client)
+9. Ensure your HoloLens is powered on and click the Play button in VS
   1. This will build and deploy to the HoloLens
   2. Once the project is deployed, it can be re-launched from the HoloLens directly
-9. The Unity side of the project is now up and running. Once the server is launched (see below), the project will work
+10. The Unity side of the project is now up and running. Once the server is launched (see below), the project will work
 
 ## Get Started with Client Side Driver Software
 1. The driver software for the data collection/transmission program requires linux as well as the following dependencies
