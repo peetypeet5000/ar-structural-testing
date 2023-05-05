@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -g -Wall
-TARGET = serial_read
+TARGET = main_current_test
 
-all: serial_read.c
+all: main_current_test.c
 	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).c
 
 clean:
