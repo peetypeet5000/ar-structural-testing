@@ -1,0 +1,28 @@
+{
+  "name": "ar-structural-testing",
+  "version": "1.0.0",
+  "description": "Node Server for transmitting data to a Hololens",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peetypeet5000/ar-structural-testing.git"
+  },
+  "keywords": [
+    "hololens"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/peetypeet5000/ar-structural-testing/issues"
+  },
+  "homepage": "https://github.com/peetypeet5000/ar-structural-testing#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
