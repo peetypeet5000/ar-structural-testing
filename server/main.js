@@ -1,21 +1,19 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
 
 let newData = [];
 
 app.get('/data', function (req, res) {
-  if(newData.length < 1) {
+  if (newData.length < 1) {
     res.send('No new data!');
   } else {
-    res.send(newData + '\n')
+    res.send(newData + '\n');
   }
+});
 
-})
+app.listen(3000);
 
-app.listen(3000)
-
-
-process.stdin.on('data', data => {
+process.stdin.on('data', (data) => {
   console.log(`stdin ${data.toString()}`);
 
   newData = data;
