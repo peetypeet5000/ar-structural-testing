@@ -13,11 +13,6 @@
 #include <errno.h>
 #include <termios.h>
 #include <unistd.h>
-#include <poll.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
 
 #ifndef BUFFER
 #define BUFFER 1024
@@ -34,8 +29,8 @@
 
 // Test Values
 #define NUM_SENSORS 5			//number of values code will simulate, DONT FORGET TO INCREASE BUFFER SIZE IF USING LARGER NUMBERS
-#define DELAY 1					//delay in seconds between sending values
 #define MAX_VALUE 10			//maximum value (exclusive) generated
+#define TEST_MODE true
 
 //-------------------------------------------------------------- 
 // FUNCTION PROTOTYPES
@@ -60,10 +55,8 @@ int main(int argc, char* argv[]){
 	int bytes_received = 0;
 	char read_buffer[BUFFER];
 
-    printf("test mode0");
-
     // If an argument is provided, run in test mode
-    if(argc == 1) {
+    if(!TEST_MODE) {
         // try to open the port and check for errors	
         port = open(OPEN_PORT, O_RDWR | O_NOCTTY);
         // attempt to open port 20 times before quiting
@@ -102,15 +95,12 @@ int main(int argc, char* argv[]){
 	    }
 	} 
 
-	printf("test mode1");
-
 	while(1){
 		// clear buffer
-        printf("test mode2");
         memset(&read_buffer, '\0', sizeof(read_buffer));
 		//bzero(read_buffer, BUFFER);
         // read data in from serial port if not in test mode
-        if(argc == 1) {
+        if(!TEST_MODE) {
             bytes_received = read(port, read_buffer, sizeof(read_buffer));
 
             if(bytes_received < 0){
@@ -129,17 +119,18 @@ int main(int argc, char* argv[]){
                 pos += sprintf(&read_buffer[pos], "%1.4f;", x);
                 
             }
+			read_buffer[pos] = '\n';
 
             bytes_received = strlen(read_buffer);
         }
     
     
         read_buffer[bytes_received] = 0;
-        //printf("Received %d: %s\n", bytes_received, read_buffer);
         printf("%s", read_buffer);
+		fflush(stdout);
 
-        if(argc != 1) {
-            sleep(DELAY);
+        if(TEST_MODE) {
+            //usleep(100000);
         }
 	}
 
