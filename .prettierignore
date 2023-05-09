@@ -1,0 +1,7 @@
+src/
+tests/
+screenshots/
+node_modules/
+.github/
+*.unitypackage
+LICENSE
