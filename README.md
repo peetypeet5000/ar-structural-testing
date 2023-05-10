@@ -36,11 +36,12 @@ on more important tasks.
 
 ## Functionality
 
-Currently the program works by syncing up a raspberry pi to the lab computer that is taking in live serial data from the testing
-environment. The data is sent through a wireless TCP connection from the pi to the hololens, read by the hololens, and output onto
-an AR data representation (heatmap and numerical values) overlaid onto the object being tested
+Currently the program works by syncing up a raspberry pi to the lab computer that is taking in live serial data from the testing environment. 
+The raspberry pi also hosts a node webserver which proivdes an endpoint to GET the most
+recent data from. 
+The hololens then grabs this data and turns it into an AR data representation (heatmap and numerical values) overlaid onto the object being tested
 
-This means there are two distinct components to this project: a Unity project and a C TCP Client program. Both of these components
+This means there are two distinct components to this project: a Unity project and a C/Node Server program. Both of these components
 need to be run simultaneously at the same time for the project to work. They do not need to be turned on in any particular order.
 Once the Unity project starts to receive server data, it will correctly place the number of sensors in the AR world and start applying
 the data to the heatmap.
@@ -98,8 +99,10 @@ Manual Option:
    7. termios.h
    8. unistd.h
    9. poll.h
-2. Compile the program. Any C compiler should work, but gcc was used during the development of this product
-3. To get the serial in, we used an RS-232 - USB cable
+3. Install node. node v18 was used in development. It is reccomended to install node via [nvm](https://github.com/nvm-sh/nvm).
+4. Compile the program. Any C compiler should work, but gcc was used during the development of this product. There is a makefile provided in the src/ directory which can be used by running `make`.
+5. To get the serial in, we used an RS-232 - USB cable conneted to the Raspberry Pi
+6. Once the cable is connected and the C code is compiled, simply run `node server/main.js` from the root of the project directory. This will start the serial read code as well as the webserver.
 
 ## Documentation/Help
 
