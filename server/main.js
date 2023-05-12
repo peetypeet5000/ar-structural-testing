@@ -26,7 +26,7 @@ app.get('*', (req, res) => {
 })
 
 
-var child = process.spawn('./src/main_current_test');
+var child = process.spawn('./serial/serial_reader');
 
 child.stdout.on('data', function (data) {
   newData = data.toString();
