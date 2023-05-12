@@ -22,11 +22,6 @@
 #define OPEN_PORT "/dev/ttyUSB0"
 #endif
 
-// change to 0 to disable debug mode
-#ifndef DEBUG_MODE
-#define DEBUG_MODE 1
-#endif
-
 // Test Values
 #define NUM_SENSORS 5			//number of values code will simulate, DONT FORGET TO INCREASE BUFFER SIZE IF USING LARGER NUMBERS
 #define MAX_VALUE 10			//maximum value (exclusive) generated
@@ -64,7 +59,7 @@ int main(int argc, char* argv[]){
             count++;
             // error messages
             display_non_errno_error("Retrying serial port connection...");
-            if(DEBUG_MODE){
+            if(TEST_MODE){
                 printf("Connections attempted: %d\n", count);
                 display_errno_error(errno, "open");
             }
@@ -75,7 +70,7 @@ int main(int argc, char* argv[]){
         memset(&tty, 0, sizeof(tty));
         if(tcgetattr(port, &tty) !=0){
             display_errno_error(errno, "tcgetattr");
-            if(!DEBUG_MODE){
+            if(!TEST_MODE){
                 return 1;
             }
 	    }
@@ -89,7 +84,7 @@ int main(int argc, char* argv[]){
         // save all flags set above
         if(tcsetattr(port, TCSANOW, &tty) != 0){
             display_errno_error(errno, "tcsetattr");
-            if(!DEBUG_MODE){
+            if(!TEST_MODE){
                 return 1;
             }
 	    }
