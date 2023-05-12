@@ -101,8 +101,11 @@ Manual Option:
    9. poll.h
 3. Install node. node v18 was used in development. It is reccomended to install node via [nvm](https://github.com/nvm-sh/nvm).
 4. Compile the program. Any C compiler should work, but gcc was used during the development of this product. There is a makefile provided in the src/ directory which can be used by running `make`.
-5. To get the serial in, we used an RS-232 - USB cable conneted to the Raspberry Pi
-6. Once the cable is connected and the C code is compiled, simply run `node server/main.js` from the root of the project directory. This will start the serial read code as well as the webserver.
+5. To get the serial in, we used an RS-232 - USB cable conneted to the Raspberry Pi. Plug this cable in before starting the server.
+6. Run 'npm i' from the root directory to install the nessesary npm packages.
+7. Once the cable is connected, and the C code is compiled, simply run `node server/main.js` from the root of the project directory. This will start the serial read code as well as the webserver.
+
+Note: The server can be run in "debug mode", which generates fake data in the C code to mimic sensor data. To enable/disable this mode, simply change the `$define DEBUG_MODE` directive in the C file, then recompile the file with `make`.
 
 ## Documentation/Help
 
