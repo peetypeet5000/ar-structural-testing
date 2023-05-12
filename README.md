@@ -60,32 +60,29 @@ Manual Option:
 
 1. Install Unity version: 2021.3.18f1
 2. Install Visual Studio with the correct dependencies according to [this](https://learn.microsoft.com/en-us/windows/mixed-reality/develop/install-the-tools#installation-checklist).
-3. Download the Unity Files from [here](https://drive.google.com/file/d/1LzIgh8ygWYbkyFkig1FuCX5lFI8wVHlr/view?usp=share_link)
-4. Unity Dependencies:
-5. NuGet Addon:
-   1. NuGet Unity Integration: https://github.com/GlitchEnzo/NuGetForUnity
-6. NuGet Plugin packages:
-   1. Microsoft.MixedReality.QR
-   2. Microsoft.VCRTForwarders.140
-7. MRTK Version 2
-
+3. Download the Unity Files from [here](https://drive.google.com/file/d/1LzIgh8ygWYbkyFkig1FuCX5lFI8wVHlr/view?usp=share_link) (will be added to this repo when finalized)
+4. Install NuGet Unity Addon:
+   * NuGet Unity Integration: https://github.com/GlitchEnzo/NuGetForUnity
+5. Install NuGet Plugin packages:
+   * Microsoft.MixedReality.QR
+   * Microsoft.VCRTForwarders.140
+6. Install MRTK Version 2
    1. Using the MRTK feature tool, point it to the project directory and press “Restore Features”
    2. Alternatively, install these features ![MRTK Features List](screenshots/mrtk.png)
-
-8. At this point, the project should run directly in the editor
-9. Build to a folder with these settings ![Build Image](screenshots/build.png)
-
-10. Open the folder, and open “AR_CS_Structural_Testing.sln”
-11. Go to the “Project” tab, and select “AR_CS_Structural_Testing Properties”
-12. In the “Debugging” tab, change the “Machine Name” to the IP Address of your HoloLens
-13. On the right side on VS in the Project menu, expand the project and open the .appxmanifest file. Enable the following capabilities:
-14. Private networks (Client and Server)
-15. Internet (Client and Server)
-16. Internet (Client)
-17. Ensure your HoloLens is powered on and click the Play button in VS
-18. This will build and deploy to the HoloLens
-19. Once the project is deployed, it can be re-launched from the HoloLens directly
-20. The Unity side of the project is now up and running. Once the server is launched (see below), the project will work
+   * Note, this may not be nessesary if you download the Unity package
+7. At this point, the project should run directly in the editor
+8. Build to a folder with these settings ![Build Image](screenshots/build.png)
+9. Open the folder, and open “AR_CS_Structural_Testing.sln”
+10. Go to the “Project” tab, and select “AR_CS_Structural_Testing Properties”
+11. In the “Debugging” tab, change the “Machine Name” to the IP Address of your HoloLens
+12. On the right side on VS in the Project menu, expand the project and open the .appxmanifest file. Enable the following capabilities:
+   * Private networks (Client and Server)
+   * Internet (Client and Server)
+   * Internet (Client)
+13. Ensure your HoloLens is powered on and on the same network and click the Play button in VS
+14. This will build and deploy to the HoloLens
+15. Once the project is deployed, it can be re-launched from the HoloLens directly
+16. The Unity side of the project is now up and running. Once the server is launched (see below), the project will work
 
 ## Get Started with Client Side Driver Software
 
@@ -108,6 +105,11 @@ Manual Option:
 Note: The server can be run in "debug mode", which generates fake data in the C code to mimic sensor data. To enable/disable this mode, simply change the `$define DEBUG_MODE` directive in the C file, then recompile the file with `make`.
 
 ## Documentation/Help
+
+### Overall Project Architecture
+
+As you can see, the project is split into 3 main components. The Serial Reader and Node Server both run on a computer hooked up to the lab computer, while the Unity project runs on the Hololens directly.
+![Architecture Diagram](screenshots/architecture.png)
 
 ### Unity Project Documentation
 
