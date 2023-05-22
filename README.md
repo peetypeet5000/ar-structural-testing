@@ -107,21 +107,17 @@ Note: The server can be run in "debug mode", which generates fake data in the C 
 
 ## Documentation/Help
 
-### Overall Project Architecture (CURRENT INFORMATION)
+### Overall Project Architecture
 
 As you can see, the project is split into 3 main components. The Serial Reader and Node Server both run on a computer hooked up to the lab computer, while the Unity project runs on the Hololens directly.
 ![Architecture Diagram](screenshots/architecture.png)
 
-### Unity Project Documentation (LEGACY INFORMATION)
+### Unity Project Documentation
 
 The files in the “Scripts” folder in Unity contain the code used for this project. Each of these scripts is independently documented
 with their purpose. The following diagram shows the general relationship between the scripts in Unity:
 ![Unity Diagram](screenshots/unity.png)
 
-### Server Documentation (LEGACY INFORMATION)
-
-The following shows the general functionality of the C script:
-![TCP](screenshots/tcp.png)
 
 ### Oustide Documentation
 
