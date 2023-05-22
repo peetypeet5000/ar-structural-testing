@@ -1,4 +1,8 @@
 <div>
     <p>Most Recent Data Recieved:</p>
-    <pre>{{data}}</pre>
+    {{#each data}}
+        <code style="display: block; width: 100%; margin-top: .5rem;">
+            {{@index}}: {{this}}           
+        </code>
+    {{/each}}   
 </div>

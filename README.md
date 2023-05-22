@@ -20,7 +20,8 @@ are under stress at any given time.
 ## Screenshots
 
 ![Screenshot 1](screenshots/screenshot_1.png)
-![Screenshot 2](screenshots/screenshot_2.png)
+![Screenshot 2](screenshots/ui_screenshot.png)
+![Screenshot 2](screenshots/irl_screenshot.png)
 
 ### Demo
 
