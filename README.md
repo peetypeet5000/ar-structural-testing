@@ -53,7 +53,7 @@ the data to the heatmap.
 
 (Requires Hololens)
 
-1. Download and run Export_Beta_0.1.unitypackage
+1. Download and run export_freeze.unitypackage
 
 **Or**
 
