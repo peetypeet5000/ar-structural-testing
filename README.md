@@ -61,7 +61,7 @@ Manual Option:
 
 1. Install Unity version: 2021.3.18f1
 2. Install Visual Studio with the correct dependencies according to [this](https://learn.microsoft.com/en-us/windows/mixed-reality/develop/install-the-tools#installation-checklist).
-3. Download the Unity Files from [here](https://drive.google.com/file/d/1LzIgh8ygWYbkyFkig1FuCX5lFI8wVHlr/view?usp=share_link) (will be added to this repo when finalized)
+3. Download the Unity Files from [here](https://oregonstate.box.com/s/9z8wrun51st5intc0l7y18l766y6zcrz) and open in Unity (OSU Owned Box folder - File too large for Git)
 4. Install NuGet Unity Addon:
    * NuGet Unity Integration: https://github.com/GlitchEnzo/NuGetForUnity
 5. Install NuGet Plugin packages:
