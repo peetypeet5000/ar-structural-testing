@@ -25,7 +25,7 @@ are under stress at any given time.
 
 ### Demo
 
-A video demonstration can be accessed [here](https://media.oregonstate.edu/media/t/1_ddj6zb36)
+A video demonstration can be accessed [here](https://media.oregonstate.edu/media/t/1_33lf06y2)
 
 ## Purpose
 
